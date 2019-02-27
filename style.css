@@ -1,0 +1,136 @@
+@font-face {
+  font-family: "Guillon";
+  font-weight: 100;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-Thin.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 200;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-Light.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 300;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-Regular.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 400;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-Demi.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 500;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-Bold.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 600;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-Black.otf");
+}
+/*italiques*/
+@font-face {
+  font-family: "Guillon";
+  font-weight: 100;
+  font-style: italic;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-ThinItalic.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 200;
+  font-style: italic;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-LightItalic.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 300;
+  font-style: italic;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-RegularItalic.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 400;
+  font-style: italic;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-DemiItalic.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 500;
+  font-style: italic;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-BoldItalic.otf");
+}
+@font-face {
+  font-family: "Guillon";
+  font-weight: 600;
+  font-style: italic;
+  src: url("http://localhost:8888/comment_gagner/font/Guillon-BlackItalic.otf");
+}
+
+body {
+  background-color: #ffffff;
+  color: #000000;
+  font-family: "Guillon";
+  font-weight: 200;
+  padding: 1em 0 0 calc(5% + 1em);
+  margin: -32px 0 0;
+  overflow: hidden;
+}
+div.50pc-container {
+  width: 50%;
+}
+div.side_color {
+  position: absolute;
+  height: 150%;
+  width: 5%;
+  background-color: #17173d;
+  margin-top: -10%;
+  margin-left: calc(-5% - 1em);
+}
+div.next_slide, div.previous_slide {
+  /*background-color: #ff5505;*/
+  box-shadow: 0 0 60px 60px rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.2);
+  transform: rotate(45deg);
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  transition: opacity 0.5s ease;
+  opacity: 0;
+}
+div.next_slide:hover, div.previous_slide:hover {
+  opacity: 1;
+}
+div.previous_slide {
+  top: calc(100% - 75px);
+  left: -75px;
+}
+div.next_slide {
+  top: calc(100% - 75px);
+  left: calc(100% - 75px);;
+}
+h1.titre--principal {
+  text-align: center;
+  font-size: 2em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+h2.sous-titre--principal {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 200;
+  text-transform: uppercase;
+}
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+  transition: all 0.8s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(100%);
+  opacity: 0;
+}
