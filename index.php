@@ -207,45 +207,8 @@ group by el.id";
       <ul id="députés">Cliquez sur une région pour commencer</ul>
     </div>
     <div id="map"></div>
-    <script src="vaudreuil.js"></script>
-    <script src="brome-missisquoi.js"></script>
-    <script src="abitibi-est.js"></script>
-    <script src="abitibi-ouest.js"></script>
-    <script src="rouyn-noranda-témiscamingue.js"></script>
-    <script src="gouin.js"></script>
-    <script src="duplessis.js"></script>
 
     <script>
-
-      var polygones = [{
-        nom: "Brome-Missisquoi",
-        color: "#00a7e7",
-        coords: JSON.parse(brome_missisquoi)
-      },{
-        nom: "Vaudreuil",
-        color: "#ee1b2e",
-        coords: vaudreuilfinal
-      },{
-        nom: "Abitibi-Est",
-        color: "#00a7e7",
-        coords: JSON.parse(abitibi_est)
-      },{
-        nom: "Abitibi-Ouest",
-        color: "#00a7e7",
-        coords: JSON.parse(abitibi_ouest)
-      },{
-        nom: "Rouyn-Noranda–Témiscamingue",
-        color: "#ff5505",
-        coords: JSON.parse(rnt)
-      },{
-        nom: "Gouin",
-        color: "#ff5505",
-        coords: JSON.parse(gouin)
-      },{
-        nom: "Duplessis",
-        color: "#004085",
-        coords: JSON.parse(duplessis)
-      }];
 
       function makePlural(n,string) {
         if (n > 1) {
