@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-deep_orange.min.css" />
-  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-deep_orange.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <title>Liste des fichiers KML</title>
   </head>
   <body>
@@ -58,7 +58,7 @@
       <div class="mdl-cell mdl-cell--2-col"></div>
       <div class="mdl-cell mdl-cell--4-col mdl-shadow--2dp">
         <h3 style="text-align:center; margin-bottom: 0;">Fichiers à traiter</h4>
-        <h6 style="text-align:center; margin-top: 0;">Polygones multiples (<?php $simple_ite =  new GlobIterator('multi-geo/*.kml'); echo $simple_ite->count(); ?>)</h6>
+        <h6 style="text-align:center; margin-top: 0;">Polygones multiples (<?php $multiple_ite =  new GlobIterator('multi-geo/*.kml'); echo $multiple_ite->count(); ?>)</h6>
         <ul class=" mdl-list">
           <?php foreach (glob('multi-geo/*.kml') as $input): ?>
             <?php if (strpos(@file_get_contents($input), 'MultiGeometry') !== false): ?>

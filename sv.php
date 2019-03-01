@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Carte des régions administratives</title>
+    <title>Résultats par section de vote</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="http://localhost:8888/maps_api/css/style.css"></link>
@@ -131,7 +131,7 @@ ci.id id,
 ci.sevo_description sevo_description,
 mu.muni_nom muni_nom,
 sum(distinct pc.pasv_ei) nb_elects,
-replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",ci.sevo_description,\",\",pa.part_couleur,\",\",pa.part_abb_usuelle,\",\",re.resv_bv,\",\",(re.resv_bv/pc.pasv_bv) order by re.resv_rang separator \";;\"),\"'\",\"&#39;\") mnas,
+replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",ci.sevo_description,\",\",pa.part_couleur,\",\",pa.part_abb_usuelle,\",\",re.resv_bv,\",\",(re.resv_bv/pc.pasv_bv) order by re.resv_bv desc, pe.pers_nom separator \";;\"),\"'\",\"&#39;\") mnas,
 (select
     p.part_couleur couleur_parti
 
@@ -174,7 +174,9 @@ left join participation_sv pc on pc.pasv_id_election = re.resv_id_election and p
 
 where
 re.resv_id_election = $election and
-ci.sevo_polygone is not null
+ci.sevo_description not like \"BVA%\" and
+ci.sevo_id_circo = 377 and
+ci.sevo_polygone not like \"[[{\\\"lat\\\":null,\\\"lng\\\":0}]]\"
 
 group by ci.id
 order by re.resv_bv;";
