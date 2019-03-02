@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Carte des régions administratives</title>
+    <title>Résultats par circonscription</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="http://localhost:8888/maps_api/css/style.css"></link>
@@ -213,7 +213,7 @@ group by el.id";
 
     ?>
     <div id="info">
-      <h3 id="polygon_name">Député·e·s par région</h3>
+      <h3 id="polygon_name">Député·e·s par circonscription</h3>
       <h5 id="election_name"><?php echo $election_name; ?></h5>
       <p id="polygon_stats"></p>
       <ul id="députés">Cliquez sur une région pour commencer</ul>

@@ -37,7 +37,7 @@
           $sevo_poylgone = [];
           $arrayed_data = [];
 
-          $spaced_data = array_map('floatval', explode(" ", str_replace(",", " ", $placemark->{'MultiGeometry'}->{'Polygon'}->{'outerBoundaryIs'}->{'LinearRing'}->{'coordinates'})));
+          $spaced_data = array_map('floatval', explode(" ", str_replace(",", " ", $placemark/*->{'MultiGeometry'}*/->{'Polygon'}->{'outerBoundaryIs'}->{'LinearRing'}->{'coordinates'})));
 
           for ($i = 0; $i < count($spaced_data) ; $i+=2) {
               array_push($arrayed_data, ["lat" => $spaced_data[$i+1], "lng" => $spaced_data[$i]]);

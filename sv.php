@@ -124,7 +124,9 @@
       $parti = "and r.resv_id_parti = ".$_GET["p"];
     }
     if (isset($_GET["c"])) {
-      $circo = "and cc.id = ".$_GET["c"];
+      $circo = "ci.sevo_id_circo in (" . $_GET["c"] . ") and";
+    }else {
+      $circo = "";
     }
     $sql = "select
 ci.id id,
@@ -175,7 +177,7 @@ left join participation_sv pc on pc.pasv_id_election = re.resv_id_election and p
 where
 re.resv_id_election = $election and
 ci.sevo_description not like \"BVA%\" and
-ci.sevo_id_circo = 377 and
+$circo
 ci.sevo_polygone not like \"[[{\\\"lat\\\":null,\\\"lng\\\":0}]]\"
 
 group by ci.id
