@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-deep_orange.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.0.3/chroma.min.js"></script>
     <title>Résultats par section de vote</title>
     <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="http://localhost:8888/maps_api/css/style.css"></link>
     <style>
       /* Always set the map height explicitly to define the size of the div
@@ -42,11 +45,11 @@
         }
         #map {
           height: 100%;
-          width: 80%;
+          width: 78%;
         }
         #info {
           height: 100%;
-          width: 20%;
+          width: 22%;
         }
         #info h3 {
           width: calc(94% + 5%);
@@ -70,6 +73,8 @@
         padding: 6px 10px 4px;
         margin-left: -5px;
         box-shadow: 1px 1px 4px 2px rgba(0,0,0,0.1);
+        font-size: 1.1em;
+        line-height: 1em;
       }
       #info h5 {
         text-align: right;
@@ -80,10 +85,13 @@
         box-shadow: 1px 1px 4px 2px rgba(0,0,0,0.1);
         margin: -18px 0 10px -5px;
         z-index: -1;
+        font-size: 1em;
+        line-height: 1em;
       }
       p#polygon_stats {
         margin-top: 0;
         padding: 0 10px 0;
+        line-height: 1em;
       }
       ul#députés {
         list-style-type: none;
@@ -94,6 +102,7 @@
       .depute_nom {
         font-weight: 400;
         font-size: 1.1em;
+        line-height: 1.1em;
       }
       .depute_circo {
         font-size: 0.9em;
@@ -102,6 +111,7 @@
           margin-bottom: 5px;
           border-left: 12px solid;
           padding-left: 10px;
+          line-height: 1.4em;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -128,11 +138,19 @@
     }else {
       $circo = "";
     }
+    if (isset($_GET["c"])) {
+      $circo_circo = " and id in (" . $_GET["c"] . ")";
+    }else {
+      $circo_circo = "";
+    }
     $sql = "select
 ci.id id,
+cc.circ_nom,
 ci.sevo_description sevo_description,
 mu.muni_nom muni_nom,
 sum(distinct pc.pasv_ei) nb_elects,
+sum(distinct pc.pasv_bv) nb_bv,
+sum(distinct pc.pasv_br) nb_br,
 replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",ci.sevo_description,\",\",pa.part_couleur,\",\",pa.part_abb_usuelle,\",\",re.resv_bv,\",\",(re.resv_bv/pc.pasv_bv) order by re.resv_bv desc, pe.pers_nom separator \";;\"),\"'\",\"&#39;\") mnas,
 (select
     p.part_couleur couleur_parti
@@ -191,8 +209,11 @@ order by re.resv_bv;";
         array_push($regions_geometry_array, [
           "id"=>$row["id"],
           "sevo_description"=>$row["sevo_description"],
+          "circ_nom"=>$row["circ_nom"],
           "muni_nom"=>$row["muni_nom"],
           "nb_elects"=>$row["nb_elects"],
+          "nb_bv"=>$row["nb_bv"],
+          "nb_br"=>$row["nb_br"],
           "couleur"=>$row["couleur_parti"],
           "pourcentage_parti"=>$row["pourcentage_parti"],
           "mnas"=>json_encode(explode(";;",$row["mnas"])),
@@ -206,26 +227,37 @@ order by re.resv_bv;";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
     $conn->set_charset('utf8mb4');
-    $sql_election = "select
-elec_nom
-from election
-where el.id = $election";
-    $result = $conn->query($sql_election);
-    if ($result->num_rows > 0) {
-      while ($row = $result->fetch_assoc()) {
-        $election_name = $row["elec_nom"];
-        $nb_elects_nat = $row["pasv_ei"];
+    $sql_circo = "select
+id,
+circ_nom,
+circ_polygone
+from circo
+where circ_id_carte = 4 $circo_circo";
+    $result_circo = $conn->query($sql_circo);
+    $circos_geometry_array = [];
+    if ($result_circo->num_rows > 0) {
+      while ($row = $result_circo->fetch_assoc()) {
+        array_push($circos_geometry_array, [
+          "id"=>$row["id"],
+          "circ_nom"=>$row["circ_nom"],
+          "geometry"=>$row["circ_polygone"]
+        ]);
       }
     } else {
-
+      echo "<script>const circo_sql = ".$sql_circo.";</script>";
     }
 
     ?>
     <div id="info">
+      <a href="/maps">
+        <button class="mdl-button mdl-js-button mdl-button--raised" onclick="navigate()">
+          Changer de circonscription
+        </button>
+      </a>
       <h3 id="polygon_name">Résultats par section de vote</h3>
-      <h5 id="election_name"><?php echo $election_name; ?></h5>
+      <h5 id="municipalite_name"></h5>
       <p id="polygon_stats"></p>
-      <ul id="députés">Cliquez sur une région pour commencer</ul>
+      <ul id="députés">Cliquez sur une section de vote pour voir les résultats</ul>
     </div>
     <div id="map"></div>
 
@@ -287,7 +319,7 @@ where el.id = $election";
         console.log("Moyenne " + r + " " + moyReg);
         console.log("Écart " + r + " " + 100*((moyReg-moyNat)/moyNat));
       }*/
-      const urlPersonnes = `http://jbenoit-belanger.com/2018/?ctx=110&pe=`;
+
       function showInfoDtails(region) {
         region.addListener("click",function () {
           document.getElementById("députés").innerHTML = "";
@@ -296,14 +328,18 @@ where el.id = $election";
           //ecartMoyenneCirco(nb_e,nb_c,region.name);
           var area = calculateArea(region);
           document.getElementById("polygon_name").innerHTML = region.name;
+          document.getElementById("municipalite_name").innerHTML = region.muncicipalite;
           document.getElementById("polygon_stats").innerHTML = `
             ${spaceForThousands(area)} km<sup>2</sup><br>
-            ${spaceForThousands(nb_e)} électeurs`;
+            ${spaceForThousands(nb_e)} électeurs<br>
+            ${spaceForThousands(region.nb_bv)} bulletins valides<br>
+            ${spaceForThousands(region.nb_br)} bulletins rejetés<br>
+            ${formatPercent((region.nb_bv+ region.nb_br)/nb_e)} de participation au jour J`;
           for (let mna of region.mnas) {
             var mna_props = mna.split(",");
             document.getElementById("députés").innerHTML +=
-            `<li style="border-left-color: #${mna_props[3]}">
-              <span class="depute_nom"><href="${urlPersonnes}${region.pers_id}">${mna_props[0]} ${mna_props[1]}</a> (${mna_props[4]})</span><br>
+            `<li class="mdl-shadow--2dp" style="border-left-color: #${mna_props[3]}">
+              <span class="depute_nom">${mna_props[0]} ${mna_props[1]} (${mna_props[4]})</span><br>
               <span class="depute_circo">${spaceForThousands(mna_props[5])} votes (${formatPercent(mna_props[6])})</span>
             </li>`
             //"<li class=\"" + mna_props[3] + "\"><span class=\"depute_nom\">" + mna_props[0] + " " + mna_props[1] + "</span><br><span class=\"depute_circo\">" + mna_props[2] + "</span></li>";
@@ -314,13 +350,32 @@ where el.id = $election";
       function initMap() {
         rgnStrokeColor = "#afa197";
         rgnFillColor = "#d1c2ba";
+        circos = [
+          <?php
+            for ($i = 0, $c = count($circos_geometry_array); $i < $c; $i++) {
+              echo "new google.maps.Polygon({
+                id: ".$circos_geometry_array[$i]["id"].",
+                name: \"".$circos_geometry_array[$i]["circ_nom"]."\",
+                paths: JSON.parse('".$circos_geometry_array[$i]["geometry"]."'),
+                strokeColor: \"#404040\",
+                strokeOpacity: 0.4,
+                strokeWeight: 5,
+                fillColor: \"#404040\",
+                fillOpacity: 0,
+              }),";
+            }
+          ?>
+        ];
         regions = [
           <?php
             for ($i = 0, $c = count($regions_geometry_array); $i < $c; $i++) {
               echo "new google.maps.Polygon({
                 id: ".$regions_geometry_array[$i]["id"].",
                 nb_elects: ".$regions_geometry_array[$i]["nb_elects"].",
-                name: \"SV ".$regions_geometry_array[$i]["sevo_description"]." - ".$regions_geometry_array[$i]["muni_nom"]."\",
+                nb_bv: ".$regions_geometry_array[$i]["nb_bv"].",
+                nb_br: ".$regions_geometry_array[$i]["nb_br"].",
+                name: \"".$regions_geometry_array[$i]["circ_nom"]." - SV n<sup>o</sup> ".$regions_geometry_array[$i]["sevo_description"]."\",
+                muncicipalite: \"".$regions_geometry_array[$i]["muni_nom"]."\",
                 yolovar: JSON.parse('".$regions_geometry_array[$i]["geometry"]."'),
                 paths: JSON.parse('".$regions_geometry_array[$i]["geometry"]."'),
                 mnas: JSON.parse('".$regions_geometry_array[$i]["mnas"]."'),
@@ -334,7 +389,7 @@ where el.id = $election";
               }),";
             }
           ?>
-        ];
+        ]
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 47.487692, lng: -75.025446},
           zoom: 7,
@@ -392,6 +447,9 @@ where el.id = $election";
         for (let region of regions) {
           region.setMap(map);
           showInfoDtails(region);
+        }
+        for (let circo of circos) {
+          circo.setMap(map);
         }
       }
 

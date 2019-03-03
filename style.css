@@ -65,72 +65,113 @@
   font-style: italic;
   src: url("http://localhost:8888/comment_gagner/font/Guillon-BlackItalic.otf");
 }
-
-body {
-  background-color: #ffffff;
-  color: #000000;
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+ body {
+   display: flex;
+   width: 100%;
+   overflow: hidden;
+ }
+@media only screen and (max-width: 736px){
+  body {
+    flex-direction: column-reverse;
+  }
+  #map {
+    height: 50%;
+    width: 100%;
+  }
+  #info {
+    height: 50%;
+    width: 100%;
+  }
+  #info h3 {
+    width: calc(54% + 5%);
+    margin-top: -15px;
+  }
+  #info h5 {
+    width: calc(54% + 4%);
+  }
+  ul#députés {
+    height: calc(100% - 150px);
+  }
+}
+@media only screen and (min-width: 737px){
+  body {
+    flex-direction: row;
+  }
+  #map {
+    height: 100%;
+    width: 78%;
+  }
+  #info {
+    height: 100%;
+    width: 22%;
+  }
+  #info h3 {
+    width: calc(94% + 5%);
+  }
+  #info h5 {
+    width: calc(94% + 4%);
+  }
+}
+#info {
   font-family: "Guillon";
-  font-weight: 200;
-  padding: 1em 0 0 calc(5% + 1em);
-  margin: -32px 0 0;
-  overflow: hidden;
+  background-color: #f3f0ee;
+  box-shadow: 0 0 6px 6px rgba(0,0,0,0.2);
+  z-index: 100;
+  padding: 5px;
 }
-div.50pc-container {
-  width: 50%;
+#info h3 {
+  text-align: right;
+  color: #fff;
+  background-color: #28347c;
+  font-weight: 300;
+  padding: 6px 10px 4px;
+  margin-left: -5px;
+  box-shadow: 1px 1px 4px 2px rgba(0,0,0,0.1);
+  font-size: 1.1em;
+  line-height: 1em;
 }
-div.side_color {
-  position: absolute;
-  height: 150%;
-  width: 5%;
+#info h5 {
+  text-align: right;
+  color: #fff;
   background-color: #17173d;
-  margin-top: -10%;
-  margin-left: calc(-5% - 1em);
+  font-weight: 300;
+  padding: 6px 10px 4px;
+  box-shadow: 1px 1px 4px 2px rgba(0,0,0,0.1);
+  margin: -18px 0 10px -5px;
+  z-index: -1;
+  font-size: 1em;
+  line-height: 1em;
 }
-div.next_slide, div.previous_slide {
-  /*background-color: #ff5505;*/
-  box-shadow: 0 0 60px 60px rgba(0,0,0,0.2);
-  background-color: rgba(0,0,0,0.2);
-  transform: rotate(45deg);
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  transition: opacity 0.5s ease;
-  opacity: 0;
+p#polygon_stats {
+  margin-top: 0;
+  padding: 0 10px 0;
+  line-height: 1em;
 }
-div.next_slide:hover, div.previous_slide:hover {
-  opacity: 1;
+ul#députés {
+  list-style-type: none;
+  padding: 0 10px 0;
+  height: calc(100% - 200px);
+  overflow-y: scroll;
 }
-div.previous_slide {
-  top: calc(100% - 75px);
-  left: -75px;
+.depute_nom {
+  font-weight: 400;
+  font-size: 1.1em;
+  line-height: 1.1em;
 }
-div.next_slide {
-  top: calc(100% - 75px);
-  left: calc(100% - 75px);;
+.depute_circo {
+  font-size: 0.9em;
 }
-h1.titre--principal {
-  text-align: center;
-  font-size: 2em;
-  font-weight: 600;
-  text-transform: uppercase;
+ul#députés li{
+    margin-bottom: 5px;
+    border-left: 12px solid;
+    padding-left: 10px;
+    line-height: 1.4em;
 }
-h2.sous-titre--principal {
-  text-align: center;
-  font-size: 1.5em;
-  font-weight: 200;
-  text-transform: uppercase;
-}
-
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
-.slide-fade-enter-active {
-  transition: all 0.8s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(100%);
-  opacity: 0;
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }

@@ -26,4 +26,5 @@ if ($result->num_rows > 0) {
 //var_dump($regions_geometry_array[2]["nom"]);
 
 $conn->close();*/
+
 ?>

@@ -1,4 +1,4 @@
-<?php $directory = 'traite/*.kml'; ?>
+<?php $directory = 'autres_kml/*.kml'; ?>
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
   <head>
@@ -55,8 +55,8 @@
           $conn = new mysqli($servername, $username, $password, $dbname);
           $conn->set_charset('utf8mb4');
 
-          $sql = "UPDATE `section_vote`
-      SET `sevo_polygone` = '" . str_replace('\"','\"',(string) json_encode($sevo_poylgone)) . "'
+          $sql = "UPDATE `mrc`
+      SET `murc_polygone` = '" . str_replace('\"','\"',(string) json_encode($sevo_poylgone)) . "'
       WHERE `id` = $sevo_id
       ";
 

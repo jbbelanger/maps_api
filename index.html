@@ -1,14 +1,205 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-deep_orange.min.css" />
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/3.0.4/choices.min.js"></script>
-    <title>Choisir les circonscriptions</title>
-  </head>
-  <body>
-    <a href="sv.php?c=475">criss</a>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-deep_orange.min.css" />
+  <!-- Include Choices CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@4/public/assets/styles/choices.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/3.0.4/choices.min.js"></script>
+  <title>Cartes de résultats</title>
+</head>
+
+<body>
+  <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+    <header class="mdl-layout__header mdl-layout__header--transparent">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Résultats électoraux par section de vote</span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation -->
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="circos.php">Par circo</a>
+          <a class="mdl-navigation__link" href="mrc.php">Par MRC</a>
+          <a class="mdl-navigation__link" href="regions.php">Par régions</a>
+        </nav>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Pages techniques</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="glob.php">Liste des KML</a>
+        <a class="mdl-navigation__link" href="bva.php">Convert BVA-BVO</a>
+        <a class="mdl-navigation__link" href="extraire--mrc.php">Extraire les MRC</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col"></div>
+        <div class="mdl-cell mdl-cell--10-col">
+          <label for="choices-multiple-remove-button">Choisir les circonscriptions à afficher par section de vote</label>
+          <select class="form-control" name="choices-multiple-remove-button" id="choices-multiple-remove-button" placeholder="Choisir les circonscriptions à afficher" multiple>
+            <option value="376">Abitibi-Est</option>
+            <option value="377">Abitibi-Ouest</option>
+            <option value="378">Acadie</option>
+            <option value="379">Anjou-Louis-Riel</option>
+            <option value="380">Argenteuil</option>
+            <option value="381">Arthabaska</option>
+            <option value="382">Beauce-Nord</option>
+            <option value="383">Beauce-Sud</option>
+            <option value="384">Beauharnois</option>
+            <option value="385">Bellechasse</option>
+            <option value="386">Berthier</option>
+            <option value="387">Bertrand</option>
+            <option value="388">Blainville</option>
+            <option value="389">Bonaventure</option>
+            <option value="390">Borduas</option>
+            <option value="391">Bourassa-Sauvé</option>
+            <option value="392">Bourget</option>
+            <option value="393">Brome-Missisquoi</option>
+            <option value="394">Chambly</option>
+            <option value="395">Champlain</option>
+            <option value="396">Chapleau</option>
+            <option value="397">Charlesbourg</option>
+            <option value="398">Charlevoix-Côte-de-Beaupré</option>
+            <option value="403">Châteauguay</option>
+            <option value="399">Chauveau</option>
+            <option value="400">Chicoutimi</option>
+            <option value="401">Chomedey</option>
+            <option value="402">Chutes-de-la-Chaudière</option>
+            <option value="404">Côte-du-Sud</option>
+            <option value="405">D'Arcy-McGee</option>
+            <option value="406">Deux-Montagnes</option>
+            <option value="407">Drummond-Bois-Francs</option>
+            <option value="408">Dubuc</option>
+            <option value="409">Duplessis</option>
+            <option value="410">Fabre</option>
+            <option value="411">Gaspé</option>
+            <option value="412">Gatineau</option>
+            <option value="413">Gouin</option>
+            <option value="414">Granby</option>
+            <option value="415">Groulx</option>
+            <option value="416">Hochelaga-Maisonneuve</option>
+            <option value="417">Hull</option>
+            <option value="418">Huntingdon</option>
+            <option value="419">Iberville</option>
+            <option value="500">Îles-de-la-Madeleine</option>
+            <option value="420">Jacques-Cartier</option>
+            <option value="421">Jean-Lesage</option>
+            <option value="422">Jean-Talon</option>
+            <option value="423">Jeanne-Mance-Viger</option>
+            <option value="424">Johnson</option>
+            <option value="425">Joliette</option>
+            <option value="426">Jonquière</option>
+            <option value="427">L'Assomption</option>
+            <option value="428">La Peltrie</option>
+            <option value="429">La Pinière</option>
+            <option value="430">La Prairie</option>
+            <option value="432">Labelle</option>
+            <option value="433">Lac-Saint-Jean</option>
+            <option value="431">LaFontaine</option>
+            <option value="434">Laporte</option>
+            <option value="435">Laurier-Dorion</option>
+            <option value="436">Laval-des-Rapides</option>
+            <option value="437">Laviolette-Saint-Maurice</option>
+            <option value="438">Les Plaines</option>
+            <option value="441">Lévis</option>
+            <option value="439">Lotbinière-Frontenac</option>
+            <option value="440">Louis-Hébert</option>
+            <option value="442">Marguerite-Bourgeoys</option>
+            <option value="443">Marie-Victorin</option>
+            <option value="444">Marquette</option>
+            <option value="445">Maskinongé</option>
+            <option value="446">Masson</option>
+            <option value="447">Matane-Matapédia</option>
+            <option value="448">Maurice-Richard</option>
+            <option value="455">Mégantic</option>
+            <option value="449">Mercier</option>
+            <option value="450">Mille-Îles</option>
+            <option value="451">Mirabel</option>
+            <option value="452">Mont-Royal-Outremont</option>
+            <option value="453">Montarville</option>
+            <option value="454">Montmorency</option>
+            <option value="456">Nelligan</option>
+            <option value="457">Nicolet-Bécancour</option>
+            <option value="458">Notre-Dame-de-Grâce</option>
+            <option value="459">Orford</option>
+            <option value="460">Papineau</option>
+            <option value="461">Pointe-aux-Trembles</option>
+            <option value="462">Pontiac</option>
+            <option value="463">Portneuf</option>
+            <option value="464">Prévost</option>
+            <option value="465">René-Lévesque</option>
+            <option value="466">Repentigny</option>
+            <option value="467">Richelieu</option>
+            <option value="468">Richmond</option>
+            <option value="469">Rimouski</option>
+            <option value="470">Rivière-du-Loup-Témiscouata</option>
+            <option value="471">Robert-Baldwin</option>
+            <option value="472">Roberval</option>
+            <option value="473">Rosemont</option>
+            <option value="474">Rousseau</option>
+            <option value="475">Rouyn-Noranda-Témiscamingue</option>
+            <option value="476">Saint-François</option>
+            <option value="477">Saint-Henri-Sainte-Anne</option>
+            <option value="478">Saint-Hyacinthe</option>
+            <option value="479">Saint-Jean</option>
+            <option value="480">Saint-Jérôme</option>
+            <option value="481">Saint-Laurent</option>
+            <option value="482">Sainte-Marie-Saint-Jacques</option>
+            <option value="483">Sainte-Rose</option>
+            <option value="484">Sanguinet</option>
+            <option value="485">Sherbrooke</option>
+            <option value="486">Soulanges</option>
+            <option value="487">Taillon</option>
+            <option value="488">Taschereau</option>
+            <option value="489">Terrebonne</option>
+            <option value="490">Trois-Rivières</option>
+            <option value="491">Ungava</option>
+            <option value="492">Vachon</option>
+            <option value="493">Vanier-Les Rivières</option>
+            <option value="494">Vaudreuil</option>
+            <option value="495">Verchères</option>
+            <option value="496">Verdun</option>
+            <option value="497">Viau</option>
+            <option value="498">Vimont</option>
+            <option value="499">Westmount-Saint-Louis</option>
+          </select>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="navigate()">
+            Aller à la carte
+          </button>
+        </div>
+        <div class="mdl-cell mdl-cell--1-col"></div>
+      </div>
+    </main>
+  </div>
+  <script>
+    var multipleCancelButton;
+    document.addEventListener('DOMContentLoaded', function() {
+      multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+        removeItemButton: true,
+      });
+    });
+    function navigate() {
+      var baseURL = "sv.php?c=";
+      var array = multipleCancelButton.currentState.items;
+      for (var i = 0; i < multipleCancelButton.currentState.items.length; i++) {
+        array[i]
+        console.log(array[i]);
+        baseURL += array[i].value;
+        if (array[i].id < array.length) {
+          baseURL += ","
+        }
+      }
+      window.location.href = baseURL;
+      //document.getElementById("navigate").href = baseURL;
+      return baseURL;
+    }
+  </script>
+</body>
+
 </html>

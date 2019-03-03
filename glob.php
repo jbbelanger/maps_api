@@ -14,7 +14,7 @@
         <h3 style="text-align:center; margin-bottom: 0;">Fichiers à traiter</h4>
         <h6 style="text-align:center; margin-top: 0;">Polygones simples (<?php $simple_ite =  new GlobIterator('simple-geo/*.kml'); echo $simple_ite->count(); ?>)</h6>
         <ul class=" mdl-list">
-          <?php foreach (glob('simple-geo/*.kml') as $input): ?>
+          <?php foreach (glob('autres_kml/*.kml') as $input): ?>
             <?php if (strpos(@file_get_contents($input), 'MultiGeometry') !== false): ?>
               <li class="mdl-list__item mdl-list__item--two-line">
                 <span class="mdl-list__item-primary-content">
