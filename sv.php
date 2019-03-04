@@ -144,14 +144,14 @@
       $circo_circo = "";
     }
     $sql = "select
-ci.id id,
-cc.circ_nom,
-ci.sevo_description sevo_description,
+sv.id id,
+ci.circ_nom,
+sv.sevo_description sevo_description,
 mu.muni_nom muni_nom,
-sum(distinct pc.pasv_ei) nb_elects,
-sum(distinct pc.pasv_bv) nb_bv,
-sum(distinct pc.pasv_br) nb_br,
-replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",ci.sevo_description,\",\",pa.part_couleur,\",\",pa.part_abb_usuelle,\",\",re.resv_bv,\",\",(re.resv_bv/pc.pasv_bv) order by re.resv_bv desc, pe.pers_nom separator \";;\"),\"'\",\"&#39;\") mnas,
+sum(distinct ps.pasv_ei) nb_elects,
+sum(distinct ps.pasv_bv) nb_bv,
+sum(distinct ps.pasv_br) nb_br,
+replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",sv.sevo_description,\",\",pa.part_couleur,\",\",pa.part_abb_usuelle,\",\",rs.resv_bv,\",\",(rs.resv_bv/ps.pasv_bv) order by rs.resv_bv desc, pe.pers_nom separator \";;\"),\"'\",\"&#39;\") mnas,
 (select
     p.part_couleur couleur_parti
 
@@ -159,8 +159,8 @@ replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",ci.sevo_description,
     left join parti p on p.id = r.resv_id_parti
 
     where
-    r.resv_id_election = $election and
-    r.resv_id_sv = re.resv_id_sv $parti
+    r.resv_id_election = rs.resv_id_election and
+    r.resv_id_sv = rs.resv_id_sv
 
     group by r.resv_id_parti
 
@@ -174,32 +174,40 @@ replace(group_concat(pe.pers_prenom,\",\",pe.pers_nom,\",\",ci.sevo_description,
 	left join participation_sv p on p.pasv_id_election = r.resv_id_election and p.pasv_id_sv = r.resv_id_sv
 
     where
-    r.resv_id_election = $election and
-    r.resv_id_sv = re.resv_id_sv $parti
+    r.resv_id_election = rs.resv_id_election and
+    r.resv_id_sv = rs.resv_id_sv
 
     group by r.resv_id_parti
 
     order by sum(r.resv_bv) desc
     limit 0,1
 ) pourcentage_parti,
-ci.sevo_polygone regi_geometry
-from resultat_sv re
-left join section_vote ci on ci.id = re.resv_id_sv
-left join municipalite mu on mu.id = ci.sevo_id_municipalite
-left join circo cc on cc.id = ci.sevo_id_circo
-left join region rg on rg.id = cc.circ_id_region
-left join personne pe on pe.id = re.resv_id_personne
-left join parti pa on pa.id = re.resv_id_parti
-left join participation_sv pc on pc.pasv_id_election = re.resv_id_election and pc.pasv_id_sv = re.resv_id_sv
+sv.sevo_polygone geometrie
+from (
+	select
+		id,
+		resv_id_election,
+		resv_id_sv,
+		resv_id_personne,
+		resv_id_parti,
+		sum(resv_bv) resv_bv
+		from resultat_sv
+		where resv_id_election = $election
+		group by resv_id_sv) rs
+left join section_vote sv on sv.id = rs.resv_id_sv
+left join municipalite mu on mu.id = sv.sevo_id_municipalite
+left join circo ci on ci.id = sv.sevo_id_circo
+left join personne pe on pe.id = rs.resv_id_personne
+left join parti pa on pa.id = rs.resv_id_parti
+left join participation_sv ps on ps.pasv_id_election = rs.resv_id_election and ps.pasv_id_sv = rs.resv_id_sv
 
 where
-re.resv_id_election = $election and
-ci.sevo_description not like \"BVA%\" and
+sv.sevo_description not like \"BVA%\" and
 $circo
-ci.sevo_polygone not like \"[[{\\\"lat\\\":null,\\\"lng\\\":0}]]\"
+sv.sevo_polygone not like \"[[{\\\"lat\\\":null,\\\"lng\\\":0}]]\"
 
-group by ci.id
-order by re.resv_bv;";
+group by sv.id
+order by rs.resv_bv;";
 
     $row;
     $result = $conn->query($sql);
