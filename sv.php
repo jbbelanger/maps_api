@@ -190,7 +190,7 @@ from (
 		sum(resv_bv) resv_bv
 		from resultat_sv
 		where resv_id_election = $election
-		group by resv_id_parti,resv_id_sv) rs
+		group by resv_id_personne,resv_id_sv) rs
 left join section_vote sv on sv.id = rs.resv_id_sv
 left join municipalite mu on mu.id = sv.sevo_id_municipalite
 left join circo ci on ci.id = sv.sevo_id_circo
