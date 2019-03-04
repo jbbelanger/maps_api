@@ -130,11 +130,8 @@
     } else {
       $election = 42;
     }
-    if (isset($_GET["p"])) {
-      $parti = "and r.resv_id_parti = ".$_GET["p"];
-    }
     if (isset($_GET["c"])) {
-      $circo = "ci.sevo_id_circo in (" . $_GET["c"] . ") and";
+      $circo = "sv.sevo_id_circo in (" . $_GET["c"] . ") and";
     }else {
       $circo = "";
     }
@@ -193,13 +190,23 @@ from (
 		sum(resv_bv) resv_bv
 		from resultat_sv
 		where resv_id_election = $election
-		group by resv_id_sv) rs
+		group by resv_id_parti,resv_id_sv) rs
 left join section_vote sv on sv.id = rs.resv_id_sv
 left join municipalite mu on mu.id = sv.sevo_id_municipalite
 left join circo ci on ci.id = sv.sevo_id_circo
 left join personne pe on pe.id = rs.resv_id_personne
 left join parti pa on pa.id = rs.resv_id_parti
-left join participation_sv ps on ps.pasv_id_election = rs.resv_id_election and ps.pasv_id_sv = rs.resv_id_sv
+left join (
+	select
+		pasv_id_election,
+		pasv_id_sv,
+		sum(pasv_bv) pasv_bv,
+		sum(pasv_br) pasv_br,
+		sum(pasv_ei) pasv_ei
+	from participation_sv
+	where pasv_id_election = $election
+	group by pasv_id_sv
+) ps on ps.pasv_id_election = rs.resv_id_election and ps.pasv_id_sv = rs.resv_id_sv
 
 where
 sv.sevo_description not like \"BVA%\" and
@@ -225,7 +232,7 @@ order by rs.resv_bv;";
           "couleur"=>$row["couleur_parti"],
           "pourcentage_parti"=>$row["pourcentage_parti"],
           "mnas"=>json_encode(explode(";;",$row["mnas"])),
-          "geometry"=>$row["regi_geometry"]
+          "geometry"=>$row["geometrie"]
         ]);
       }
     } else {
